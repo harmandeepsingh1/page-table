@@ -22,6 +22,13 @@
 					$scope.userList.push(temp);
 				}
 			}
+			$scope.click1 = function(param){
+				alert(JSON.stringify(param));
+			};
+			$scope.click2 = function(param){
+				alert(JSON.stringify(param));
+			};
+			$scope.funcList = [$scope.click1, $scope.click2];
 		}]);
 		app.filter('startFrom', function() {
     		return function(input, start) {
@@ -39,7 +46,8 @@
 					headers: "=",
 					selfheaders: "=",
 					sno: "=",
-					pageRange: "="
+					pageRange: "=",
+					funcList: "="
 				},
 				link: function($scope, elements, attribute){
 					$scope.filteredList = null;
@@ -111,7 +119,7 @@
 							'<tr>',
 							'<tr ng-repeat = "person in filteredList | orderBy: orderByVariable: orderByAsc | startFrom: (currentPage*numberOfItemsPerPage) | limitTo:numberOfItemsPerPage">',
 								'<td ng-show="sno">{{$index+1+currentPage*numberOfItemsPerPage}}</td>',
-								'<td ng-repeat="attribute in headers">{{person[attribute]}}</td>',
+								'<td ng-repeat="attribute in headers" ng-click="funcList[$index](person)">{{person[attribute]}}</td>',
 							'</tr>',
 						'</table>',
 					'<div>'
@@ -123,6 +131,6 @@
 <body ng-app = "pageApp" ng-controller = "pageCtrl">
 	<input type="text" ng-model="searchText" ng-change="initializeText()" />
 	<button ng-click="generateArray()">Click to get Data</button>
-	<page-table list="userList" headers = "headers" selfheaders = "selfheaders" sno="true" page-range="pageRange"></page-table>
+	<page-table list="userList" headers = "headers" search = "searchText" selfheaders = "selfheaders" sno="true" page-range="pageRange" func-list="funcList"></page-table>
 </body>
 </html>
