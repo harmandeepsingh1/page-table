@@ -1,23 +1,3 @@
-var app = angular.module("pageApp", []);
-app.controller("pageCtrl", ["$scope", "$timeout",function($scope, $timeout){
-	$scope.userList = [];
-	$scope.headers = ["0-4", "age"];
-	$scope.selfheaders = ["0-4", "Age"];
-	$scope.pageRange = [10, 50, 100, 200];
-	$scope.generateArray = function(){
-		for(var i = 0; i<100; i++){
-			var temp = {};
-			//$scope.userList.push({name: "Harman"+i, age: Math.floor(Math.random()*100+1)});
-			for(var j = 0; j<$scope.headers.length; j++)
-				temp[$scope.headers[j]] = Math.floor(Math.random()*100+1);
-			$scope.userList.push(temp);
-		}
-	}
-	$scope.passedFunction = function(param, index){
-		alert(JSON.stringify(param)+ " "+ index);
-		//alert("Passed Function");
-	};
-}]);
 app.filter('startFrom', function() {
 	return function(input, start) {
 		if(input){
