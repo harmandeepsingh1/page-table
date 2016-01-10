@@ -1,4 +1,5 @@
-app.filter('startFrom', function() {
+var pageTableApp = angular.module("page-table", []);
+pageTableApp.filter('startFrom', function() {
 	return function(input, start) {
 		if(input){
 			return input.slice(parseInt(start, 10));
@@ -6,7 +7,7 @@ app.filter('startFrom', function() {
 		return [];
 	}
 });
-app.directive("pageTable", function(filterFilter, orderByFilter){
+pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 	return{
 		scope:{
 			list: "=",
