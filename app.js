@@ -58,8 +58,9 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 					return "active";
 				return "";
 			}
-			scope.$watch('list', function(term){
+			scope.$watch('[list, pageRange]', function(term){
 				scope.numberOfPages = Math.ceil(scope.list.length/scope.numberOfItemsPerPage);
+				scope.currentPage = 0;
 			}, true);
 			scope.$watch('search', function(term){
 				scope.filteredList = (filterFilter(scope.list, term));
