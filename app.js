@@ -21,8 +21,8 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 		link: function(scope, elements, attribute){
 			scope.filteredList = null;
 			scope.currentPage = 0;
-			scope.numberOfItemsPerPage = 10;
-			scope.numberOfPages = 10;
+			scope.numberOfItemsPerPage = scope.pageRange[0];
+			scope.numberOfPages = 0;
 			scope.orderByVariable = scope.headers[0];
 			scope.orderByAsc = false;
 			scope.setPageNumber = function(pageNumber){
@@ -50,6 +50,11 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 			scope.clickCbWrapper = function(row, head){
 				scope.clickCb()(row, head);
 			}
+			scope.setActive = function(n){
+				if(n-1==scope.currentPage)
+					return "active";
+				return "";
+			}
 			scope.$watch('list', function(term){
 				scope.numberOfPages = Math.ceil(scope.list.length/scope.numberOfItemsPerPage);
 			}, true);
@@ -75,7 +80,7 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 					'</select>',
 					'<ul class= "pagination" style="width:60%;margin:0 auto;float:left;padding-left: 2cm;">',
 						'<li><a href="#" ng-click="decrementPage()">&laquo;</a></li>',
-						'<li ng-repeat="n in range()">',
+						'<li ng-repeat="n in range()" ng-class="setActive(n)">',
 							'<a href="#" ng-click="setPageNumber(n)">{{n}}</a>',
 						'</li>',
 						'<li><a href="#" ng-click="incrementPage()">&raquo;</a></li>',
