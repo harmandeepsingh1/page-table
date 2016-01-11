@@ -21,7 +21,7 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 		link: function(scope, elements, attribute){
 			scope.filteredList = null;
 			scope.currentPage = 0;
-			scope.numberOfItemsPerPage = scope.pageRange[0];
+			scope.numberOfItemsPerPage = scope.pageRange?scope.pageRange[0]:9999999;
 			scope.numberOfPages = 0;
 			scope.orderByVariable = scope.headers[0];
 			scope.orderByAsc = false;
@@ -48,6 +48,8 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 				}, 0);
 			};
 			scope.clickCbWrapper = function(row, head){
+				if(attribute.clickCb===undefined)
+					return;
 				scope.clickCb()(row, head);
 			}
 			scope.setActive = function(n){
@@ -73,7 +75,7 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 		},
 		template: [
 			'<div ng-show="filteredList.length" style="width:100%;padding-top: 1cm;">',
-				'<div style="padding-bottom:1cm;">',
+				'<div style="padding-bottom:1cm;" ng-show="pageRange">',
 					'<select class = "form-control" ng-model="numberOfItemsPerPage" style="float:left;width:250px">',
 						'<option value = "" style="display:none;">No. of rows per Page</option>',
 						'<option ng-repeat = "val in pageRange" value = {{val}}>{{val}}</option>',
