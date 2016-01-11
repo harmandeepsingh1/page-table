@@ -16,15 +16,16 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 			selfheaders: "=",
 			sno: "=",
 			pageRange: "=",
-			clickCb: "&"
+			clickCb: "&",
+			initialSort: "@"
 		},
 		link: function(scope, elements, attribute){
 			scope.filteredList = null;
 			scope.currentPage = 0;
 			scope.numberOfItemsPerPage = scope.pageRange?scope.pageRange[0]:9999999;
 			scope.numberOfPages = 0;
-			scope.orderByVariable = scope.headers[0];
-			scope.orderByAsc = false;
+			scope.orderByVariableBefore = scope.initialSort?scope.initialSort:scope.headers[0];
+			scope.orderByDsc = true;
 			scope.setPageNumber = function(pageNumber){
 				scope.currentPage = pageNumber-1;
 			}
@@ -69,8 +70,8 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 				scope.numberOfPages = Math.ceil(scope.filteredList.length/scope.numberOfItemsPerPage);
 				scope.currentPage = 0;
 			});
-			scope.$watch('orderByVariable2', function(term){
-				scope.orderByVariable = "\u0022"+scope.orderByVariable2+"\u0022";
+			scope.$watch('orderByVariableBefore', function(term){
+				scope.orderByVariable = "\u0022"+scope.orderByVariableBefore+"\u0022";
 			});
 		},
 		template: [
@@ -89,15 +90,15 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 					'</ul>',
 				'</div>',
 				'<table class="table table-condensed">',
-					'<tr ng-hide = "selfheaders.length" ng-click="orderByAsc=!orderByAsc">',
+					'<tr ng-hide = "selfheaders.length" ng-click="orderByDsc=!orderByDsc">',
 						'<th ng-show = "sno" >S.No.</th>',
-						'<th ng-repeat = "attribute in headers" ng-click="$parent.orderByVariable2=attribute">{{attribute}}</th>',
+						'<th ng-repeat = "attribute in headers" ng-click="$parent.orderByVariableBefore=attribute">{{attribute}}</th>',
 					'<tr>',
-					'<tr ng-show = "selfheaders.length"  ng-click="orderByAsc=!orderByAsc">',
+					'<tr ng-show = "selfheaders.length"  ng-click="orderByDsc=!orderByDsc">',
 						'<th ng-show = "sno" >S.No.</th>',
-						'<th ng-repeat = "attribute in selfheaders"  ng-click="$parent.orderByVariable2=headers[$index]">{{attribute}}</th>',
+						'<th ng-repeat = "attribute in selfheaders"  ng-click="$parent.orderByVariableBefore=headers[$index]">{{attribute}}</th>',
 					'<tr>',
-					'<tr ng-repeat = "person in filteredList | orderBy: orderByVariable: orderByAsc | startFrom: (currentPage*numberOfItemsPerPage) | limitTo:numberOfItemsPerPage">',
+					'<tr ng-repeat = "person in filteredList | orderBy: orderByVariable: orderByDsc | startFrom: (currentPage*numberOfItemsPerPage) | limitTo:numberOfItemsPerPage">',
 						'<td ng-show="sno">{{$index+1+currentPage*numberOfItemsPerPage}}</td>',
 						'<td ng-repeat="attribute in headers" ng-click="clickCbWrapper(person, attribute)">{{person[attribute]}}</td>',
 					'</tr>',
