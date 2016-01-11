@@ -22,7 +22,7 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 		link: function(scope, elements, attribute){
 			scope.filteredList = null;
 			scope.currentPage = 0;
-			scope.numberOfItemsPerPage = scope.pageRange?scope.pageRange[0]:9999999;
+			scope.numberOfItemsPerPage = scope.pageRange.length?scope.pageRange[0]:9999999;
 			scope.numberOfPages = 0;
 			scope.orderByVariableBefore = scope.initialSort?scope.initialSort:scope.headers[0];
 			scope.orderByDsc = true;
@@ -58,7 +58,7 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 					return "active";
 				return "";
 			}
-			scope.$watch('[list, pageRange]', function(term){
+			scope.$watch('list', function(term){
 				scope.numberOfPages = Math.ceil(scope.list.length/scope.numberOfItemsPerPage);
 				scope.currentPage = 0;
 			}, true);
@@ -67,6 +67,10 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 				scope.numberOfPages = Math.ceil(scope.filteredList.length/scope.numberOfItemsPerPage);
 				scope.currentPage = 0;
 			});
+			scope.$watch('pageRange.length', function(term){
+				scope.numberOfItemsPerPage = scope.pageRange.length?scope.pageRange[0]:9999999;
+				scope.currentPage = 0;
+			}, true);
 			scope.$watch('numberOfItemsPerPage', function(term){
 				scope.numberOfPages = Math.ceil(scope.filteredList.length/scope.numberOfItemsPerPage);
 				scope.currentPage = 0;
