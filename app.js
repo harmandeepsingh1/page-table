@@ -22,7 +22,7 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 		link: function(scope, elements, attribute){
 			scope.filteredList = null;
 			scope.currentPage = 0;
-			scope.numberOfItemsPerPage = scope.pageRange.length?scope.pageRange[0]:9999999;
+			scope.numberOfItemsPerPage = scope.pageRange?scope.pageRange[0]:9999999;
 			scope.numberOfPages = 0;
 			scope.orderByVariableBefore = scope.initialSort?scope.initialSort:scope.headers[0];
 			scope.orderByDsc = true;
@@ -67,8 +67,8 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 				scope.numberOfPages = Math.ceil(scope.filteredList.length/scope.numberOfItemsPerPage);
 				scope.currentPage = 0;
 			});
-			scope.$watch('pageRange.length', function(term){
-				scope.numberOfItemsPerPage = scope.pageRange.length?scope.pageRange[0]:9999999;
+			scope.$watch('pageRange', function(term){
+				scope.numberOfItemsPerPage = scope.pageRange?scope.pageRange[0]:9999999;
 				scope.currentPage = 0;
 			}, true);
 			scope.$watch('numberOfItemsPerPage', function(term){
@@ -80,13 +80,15 @@ pageTableApp.directive("pageTable", function(filterFilter, orderByFilter){
 			});
 		},
 		template: [
-			'<div ng-show="filteredList.length" style="width:100%;padding-top: 1cm;">',
+			'<div ng-show="filteredList.length" style="width:100%;">',
 				'<div style="padding-bottom:1cm;" ng-show="pageRange">',
-					'<select class = "form-control" ng-model="numberOfItemsPerPage" style="float:left;width:250px">',
-						'<option value = "" style="display:none;">No. of rows per Page</option>',
-						'<option ng-repeat = "val in pageRange" value = {{val}}>{{val}}</option>',
-					'</select>',
-					'<ul class= "pagination" style="width:60%;margin:0 auto;float:left;padding-left: 2cm;">',
+					'<div style="float:left;">',
+						'<label>No. of items per page:</label>',
+						'<select class = "form-control" ng-model="numberOfItemsPerPage" style="width:250px">',
+							'<option ng-repeat = "val in pageRange" value = {{val}}>{{val}}</option>',
+						'</select>',
+					'</div>',
+					'<ul class= "pagination" style="width:60%;margin:0 auto;padding-left: 2cm;">',
 						'<li><a href="#" ng-click="decrementPage()">&laquo;</a></li>',
 						'<li ng-repeat="n in range()" ng-class="setActive(n)">',
 							'<a href="#" ng-click="setPageNumber(n)">{{n}}</a>',
